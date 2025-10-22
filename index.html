@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta content="width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5" name="viewport" />
+  <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Antique:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
+  <link rel="preload" as="image" href="./Valentine-Surprise.png">
+
+  <!-- Update title and description for a birthday theme -->
+  <title>HBD</title>
+  <link rel="icon" type="image/x-icon" href="https://www.palingit.com/favicon.ico" />
+  <meta name="description" content="A special birthday greeting" />
+</head>
+
+<body style="background: linear-gradient(to bottom, #ffe1e1, #ff217de0), url(./r.jpg);
+    height: 100vh;">
+  <audio src="/Sundari neeve BGM.mp3" id="linkmp3" class="sembunyi"></audio>
+
+  <div id="bodyblur">
+    <!-- Wallpaper -->
+    <img src="" id="wallpaper" />
+  </div>
+
+  <div id="Content">
+    <div id="kadoIn" style="display:flex;justify-content:center;align-items:center;min-height:30vh;">
+      <!-- Gift Button: show closed gift first, then swap to open image on click -->
+      <img id="giftImg" src="./GiftBox.png" alt="Closed gift box" role="button" aria-label="Open gift" tabindex="0" data-open-src="./Valentine-Surprise.png" style="cursor:pointer;transition:transform .6s ease, opacity .6s ease;max-width:280px;height:auto;" />
+    </div>
+    <p id="ket" style="text-align:center;margin-top:10px;">
+      <span style="font-style: italic; color: rgb(0,0,0); margin-top: 3px !important; display:inline-block;">Open the gift, cutie&lt;3😍</span>
+    </p>
+
+    <div class="kumpulanstiker" style="margin-top: 95px;">
+      <!-- Stickers for Content -->
+      <img src="https://media.tenor.com/4Ijycn6xFzUAAAAj/mochi-blue-roses.gif" id="fotostiker" />
+      <img src="https://feeldreams.github.io/bunga.gif" id="fotostiker1" />
+      <img src="https://feeldreams.github.io/pandacoklat.gif" id="fotostiker2" />
+      <img src="https://media.tenor.com/snFoLI-S9CQAAAAj/milk-and-mocha.gif" id="fotostiker3" />
+      <img src="https://feeldreams.github.io/emawh.gif" id="fotostiker4" />
+      <img src="https://feeldreams.github.io/pandacoklat.gif" id="fotostiker5" />
+    </div>
+
+    <p id="halo" class="halo"></p>
+
+    <div>
+      <blockquote id="bq" data-text="💞">
+        <!-- Update the messages for a birthday greeting -->
+        <p id="kalimat">
+          Happy Birthday, gorgeous! Today is all about celebrating your Birthday.
+        </p>
+
+        <!-- Message -->
+        <p id="pesan1">Tap here for your birthday surprise! 🎉</p>
+        <div id="kolombaru">
+          <li id="lv1">🎂</li>
+          <li id="lv2">🎁</li>
+          <li id="lv3">🥳</li>
+          <li id="lv4">💖</li>
+        </div>
+
+        <p id="pesan2">You shine brighter every year! ✨</p>
+        <p id="pesan3">Do you know what makes today extra special?</p>
+        <p id="pesan4" class="sty2">It’s your birthday!</p>
+        <p id="pesan5" class="sty2">
+          Today, I wish you a year filled with laughter, love, and unforgettable moments.
+        </p>
+        <p id="pesan6" class="sty2">
+          Remember, you deserve every happiness in the world. Celebrate big and enjoy every moment!
+        </p>
+
+        <!-- Next Button -->
+        <p id="opsL">Tap to continue the celebration!</p>
+      </blockquote>
+    </div>
+
+    <!-- Send Message Button -->
+    <div id="Tombol"><a id="By">&#128140; Next</a></div>
+
+    <!-- Rejected Message (if needed) -->
+    <div id="pesanditolak">
+      <img id="stikerditolak" src="https://feeldreams.github.io/weee.gif" />
+      <p id="kataditolak">
+        Oops! You can’t skip this birthday magic.
+      </p>
+    </div>
+  </div>
+
+  <!-- Fullscreen overlay used to smooth transition when navigating to the love page -->
+  <div id="navOverlay" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:#000;z-index:9999;
+    opacity:0;transition:opacity .25s linear;"></div>
+
+  <script>
+    // Main script remains similar; further changes are made in a.js if needed.
+    const body = document.querySelector("body");
+    const swalst = Swal.mixin({
+      timer: 2300,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      timerProgressBar: true,
+      imageHeight: 90,
+    });
+    audio = new Audio("" + linkmp3.src);
+    ftganti = 0;
+    fungsi = 0;
+    fungsiAwal = 0;
+    deffotostiker = fotostiker.src;
+    Content.style = "opacity:1;margin-top:16vh";
+    const swals = Swal.mixin({
+      allowOutsideClick: false,
+      cancelButtonColor: "#FF0040",
+      imageHeight: 80,
+    });
+
+  // Make the gift appear closed first. Preload opened image and handle click/keyboard
+  // to show an "opening" animation (swap to the opened image) and only after
+  // that run the original flow.
+  const giftImg = document.getElementById("giftImg");
+  // preload opened image to avoid flicker
+  const openedGiftImg = new Image();
+  openedGiftImg.src = giftImg.dataset.openSrc || './Valentine-Surprise.png';
+  let giftOpened = false;
+    // allow both click and keyboard (Enter/Space) to open gift
+    function handleOpenGift() {
+      if (fungsiAwal == 0 && !giftOpened) {
+        giftOpened = true;
+        // small 2-step animation: tilt/scale, swap image, then continue
+        giftImg.style.transform = "scale(1.05) rotateX(-20deg)";
+        giftImg.style.opacity = "0.95";
+        // After the tilt, swap to the opened gift image
+        setTimeout(() => {
+          giftImg.src = "./Valentine-Surprise.png";
+          // reset transform for a subtle pop
+          giftImg.style.transform = "scale(1) rotateX(0)";
+          // short delay for the user to see the opened gift
+          setTimeout(() => {
+            // original behavior: play audio and proceed
+            audio.play();
+            fungsiAwal = 1;
+            kadoIn.style = "transition:all .8s ease;transform:scale(10);opacity:0";
+            wallpaper.style = "transform: scale(1.5);";
+            ket.style = "display:none";
+            setTimeout(initengahan, 300);
+            setTimeout(inipesan, 500);
+          }, 350);
+        }, 350);
+      }
+    }
+
+    document.getElementById("kadoIn").onclick = handleOpenGift;
+    giftImg.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleOpenGift(); }
+    });
+
+    // Replace interactive name prompt with a fixed recipient name.
+    async function inipesan() {
+      // Use the provided name instead of asking the user to enter one.
+      const fixedName = 'Reethu❤️';
+      window.nama = fixedName;
+      vketikhalo = "Happy Birthday, " + window.nama + "!";
+      // proceed with the same flow as before
+      mulainama();
+    }
+
+  var tanya = "How about we celebrate your birthday in style?";
+  // remove the extra subtext so the dialog shows only the title and button
+  var opstanya = "";
+  var tompositif = "Absolutely, let's celebrate";
+
+    async function pertanyaan() {
+      // Show the SweetAlert dialog and navigate immediately on confirm.
+      const result = await swals.fire({
+        title: (window.nama || "") + ", " + tanya,
+        imageUrl: "" + fotostiker5.src,
+        allowOutsideClick: false,
+        showCancelButton: false,
+        confirmButtonText: "" + tompositif,
+      });
+
+      // If the user confirmed, navigate with smooth fade using overlay.
+      if (result && result.isConfirmed) {
+        // Store current audio time to continue on next page
+        sessionStorage.setItem('audioCurrentTime', audio.currentTime);
+        // Activate overlay for smooth transition
+        const navOverlay = document.getElementById('navOverlay');
+        navOverlay.style.display = 'block';
+        navOverlay.style.opacity = '1';
+        setTimeout(function() { window.location = './love/index.html'; }, 250);
+      }
+    }
+  </script>
+  <script src="a.js"></script>
+</body>
+
+</html>
