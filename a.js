@@ -226,24 +226,7 @@ document.getElementById("lv2").onclick = function() { lv2.style = "opacity:0"; s
 document.getElementById("lv3").onclick = function() { lv3.style = "opacity:0"; slov += 1; this.onclick = null; checkslov(); }
 document.getElementById("lv4").onclick = function() { lv4.style = "opacity:0"; slov += 1; this.onclick = null; checkslov(); }
 
-// Single-click handler: clicking the whole emoji row will count as selecting all four at once.
-document.getElementById("kolombaru").onclick = function () {
-  if (slov < 4) {
-    // visually mark all as selected
-    lv1.style = "opacity:0";
-    lv2.style = "opacity:0";
-    lv3.style = "opacity:0";
-    lv4.style = "opacity:0";
-    // update counter and disable individual handlers to avoid double counting
-    slov = 4;
-    document.getElementById("lv1").onclick = null;
-    document.getElementById("lv2").onclick = null;
-    document.getElementById("lv3").onclick = null;
-    document.getElementById("lv4").onclick = null;
-    // trigger the same progression
-    checkslov();
-  }
-}
+// Remove the container click handler to require tapping each emoji individually
 
 function checkslov() {
   if (slov == 4) {
